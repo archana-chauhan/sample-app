@@ -60,7 +60,8 @@ fun CouponItem(
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = "Edit"
+                                    contentDescription = "Edit",
+                                    modifier = Modifier.size(24.dp),
                                 )
                             }
                         }

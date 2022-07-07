@@ -54,17 +54,15 @@ fun AddEditCouponScreen(
     startDay = startCalendar.get(Calendar.DAY_OF_MONTH)
     startCalendar.time = Date()
 
-
     val startDatePickerDialog = DatePickerDialog(
         activity,
         { _: DatePicker, startYear: Int, startMonth: Int, startDay: Int ->
             viewModel.startDate = "$startDay/${startMonth + 1}/$startYear"
             startCalendar.set(startYear, startMonth, startDay)
             viewModel.startDateMl = startCalendar.timeInMillis
+            viewModel.unlimitedTime = false
         }, startYear, startMonth, startDay
     )
-
-
     // For End Date
     val endYear: Int
     val endMonth: Int
@@ -79,6 +77,7 @@ fun AddEditCouponScreen(
         activity,
         { _: DatePicker, endYear: Int, endMonth: Int, endDay: Int ->
             viewModel.endDate = "$endDay/${endMonth + 1}/$endYear"
+            viewModel.unlimitedTime = false
         }, endYear, endMonth, endDay
     )
     LaunchedEffect(key1 = true) {

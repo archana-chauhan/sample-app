@@ -30,7 +30,6 @@ class AddEditCouponViewModel @Inject constructor(
     var startDateMl by mutableStateOf(0L)
     var endDate by mutableStateOf("")
     var unlimitedTime by mutableStateOf(false)
-        private set
     private val _uiEvent = Channel<CouponUIEvents>()
     val uiEvent = _uiEvent.receiveAsFlow()
     init {
@@ -121,6 +120,12 @@ class AddEditCouponViewModel @Inject constructor(
                         )
                         return@launch
                     }
+                    if (unlimitedTime) {
+                        startDate = ""
+                        endDate = ""
+                    }
+
+
 //                    if (startDate.isBlank()) {
 //                        sendUiEvent(
 //                            CouponUIEvents.ShowSnackbar(
