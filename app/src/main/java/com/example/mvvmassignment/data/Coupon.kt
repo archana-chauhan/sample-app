@@ -8,6 +8,7 @@ data class Coupon(
     val type: String,
     val value: String,
     val start_date: String,
+    val start_date_ml: Long,
     val end_date: String,
     val unlimited_time: Boolean,
     @PrimaryKey val id: Int? = null

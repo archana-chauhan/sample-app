@@ -1,6 +1,7 @@
 package com.example.mvvmassignment.ui.add_edit_coupon
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -52,17 +53,24 @@ fun AddEditCouponScreen(
     startMonth = startCalendar.get(Calendar.MONTH)
     startDay = startCalendar.get(Calendar.DAY_OF_MONTH)
     startCalendar.time = Date()
+
+
     val startDatePickerDialog = DatePickerDialog(
         activity,
         { _: DatePicker, startYear: Int, startMonth: Int, startDay: Int ->
             viewModel.startDate = "$startDay/${startMonth + 1}/$startYear"
+            startCalendar.set(startYear, startMonth, startDay)
+            viewModel.startDateMl = startCalendar.timeInMillis
         }, startYear, startMonth, startDay
     )
+
+
     // For End Date
     val endYear: Int
     val endMonth: Int
     val endDay: Int
     val endCalendar = Calendar.getInstance()
+//    val endCal = viewModel.startDateMl
     endYear = endCalendar.get(Calendar.YEAR)
     endMonth = endCalendar.get(Calendar.MONTH)
     endDay = endCalendar.get(Calendar.DAY_OF_MONTH)
@@ -147,7 +155,7 @@ fun AddEditCouponScreen(
                             onValueChange = {
                                 viewModel.type = it
                                 expanded = false
-                                viewModel.onEvent(AddEditCouponEvent.OnTypeChange(it))
+                                viewModel.onEvent(AddEditCouponEvent.OnTypeChange(it, viewModel.value))
                             },
                             modifier = Modifier
                                 .clickable {
@@ -167,6 +175,7 @@ fun AddEditCouponScreen(
                                 DropdownMenuItem(onClick = {
                                     viewModel.type = label
                                     expanded = !expanded
+                                    viewModel.value = ""
                                 }) {
                                     Text(text = label)
                                 }
@@ -213,7 +222,8 @@ fun AddEditCouponScreen(
                     OutlinedTextField(
                         value = viewModel.startDate,
                         enabled = false,
-                        onValueChange = { viewModel.onEvent(AddEditCouponEvent.OnStartDateChange(it)) },
+                        onValueChange = {
+                            viewModel.onEvent(AddEditCouponEvent.OnStartDateChange(it, viewModel.startDateMl)) },
                         label = {
                             Text(text = "Start Date")
                         },
@@ -235,7 +245,7 @@ fun AddEditCouponScreen(
                             .wrapContentHeight()
                             .clickable {
                                 startDatePickerDialog.datePicker.minDate =
-                                    startCalendar.timeInMillis;
+                                    startCalendar.timeInMillis
                                 startDatePickerDialog.show()
                             }
                     )
@@ -271,7 +281,7 @@ fun AddEditCouponScreen(
                             .fillMaxWidth()
                             .wrapContentHeight()
                             .clickable {
-                                endDatePickerDialog.datePicker.minDate = startCalendar.timeInMillis;
+                                endDatePickerDialog.datePicker.minDate = viewModel.startDateMl
                                 endDatePickerDialog.show()
                             }
                     )

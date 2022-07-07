@@ -17,7 +17,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCouponDatabase(app: Application): CouponDatabase {
-        return Room.databaseBuilder(app, CouponDatabase::class.java, "coupon_db").build()
+        return Room.databaseBuilder(app, CouponDatabase::class.java, "coup_db").build()
     }
     @Provides
     @Singleton

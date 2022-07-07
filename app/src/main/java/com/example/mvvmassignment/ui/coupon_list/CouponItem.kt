@@ -22,19 +22,6 @@ fun CouponItem(
     onEvent: (CouponListEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val value2 = coupon.type
-    val value = if (value2.equals("Percentage")) {
-        "%"
-    } else {
-        "$"
-    }
-
-    val showText = if (!coupon.start_date.isBlank() && !coupon.end_date.isBlank()) {
-        "Grab this offer which starts on ${coupon.start_date} & ends on ${coupon.end_date}"
-    }
-    else {
-        ""
-    }
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -79,7 +66,11 @@ fun CouponItem(
                         }
                     }
                     Text(
-                        text = coupon.value + value,
+                        text = if (coupon.type.equals("Percentage")) {
+                            coupon.value + "%" + " OFF"
+                        } else {
+                            "$" + coupon.value
+                        },
                         fontFamily = FontFamily(Font(R.font.medium)),
                         fontSize = 20.sp,
                         color = colorResource(
@@ -89,7 +80,11 @@ fun CouponItem(
                             .fillMaxWidth()
                     )
                     Text(
-                        text = showText,
+                        text = if (!coupon.start_date.isBlank() && !coupon.end_date.isBlank()) {
+                            "Grab this offer which starts on ${coupon.start_date} & ends on ${coupon.end_date}"
+                        } else {
+                            ""
+                        },
                         fontFamily = FontFamily(Font(R.font.regular)),
                         fontSize = 16.sp,
                         color = colorResource(

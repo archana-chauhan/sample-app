@@ -27,6 +27,7 @@ class AddEditCouponViewModel @Inject constructor(
     var type by mutableStateOf("")
     var value by mutableStateOf("")
     var startDate by mutableStateOf("")
+    var startDateMl by mutableStateOf(0L)
     var endDate by mutableStateOf("")
     var unlimitedTime by mutableStateOf(false)
         private set
@@ -41,6 +42,7 @@ class AddEditCouponViewModel @Inject constructor(
                     type = coupon.type
                     value = coupon.value
                     startDate = coupon.start_date
+                    startDateMl = coupon.start_date_ml
                     endDate = coupon.end_date
                     unlimitedTime = coupon.unlimited_time
                     this@AddEditCouponViewModel.coupon = coupon
@@ -56,12 +58,36 @@ class AddEditCouponViewModel @Inject constructor(
             }
             is AddEditCouponEvent.OnTypeChange -> {
                 type = event.type
+                value = event.value2
+                if (type.equals("Percentage")) {
+                    if (!value.isBlank()) {
+                        value = ""
+                    }
+                    else {
+                        value = value
+                    }
+                }
+                else if (type.equals("Monetary")) {
+                    if (!value.isBlank()) {
+                        value = ""
+                    }
+                    else {
+                        value = String.format("%.2f", value.toDouble())
+                    }
+
+                }
             }
             is AddEditCouponEvent.OnValueChange -> {
-                value = String.format("%.2f", event.value.toDouble())
+                if (type.equals("Percentage")) {
+                    value = event.value
+                }
+                else if (type.equals("Monetary")) {
+                    value = String.format("%.2f", event.value.toDouble())
+                }
             }
             is AddEditCouponEvent.OnStartDateChange -> {
                 startDate = event.start_date
+                startDateMl = event.start_date_ml
             }
             is AddEditCouponEvent.OnEndDateChange -> {
                 endDate = event.end_date
@@ -118,6 +144,7 @@ class AddEditCouponViewModel @Inject constructor(
                             type = type,
                             value = value,
                             start_date = startDate,
+                            start_date_ml = startDateMl,
                             end_date = endDate,
                             unlimited_time = unlimitedTime,
                         )
